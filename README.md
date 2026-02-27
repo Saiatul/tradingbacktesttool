@@ -133,14 +133,6 @@ Example Output:
 
 ---
 
-### 6. Paper Trading Integration
-
-- Strategy deployment to Alpaca Paper Trading
-- Simulated live execution
-- Real-time monitoring (WebSocket integration planned)
-
----
-
 ## Tech Stack
 
 - Python
