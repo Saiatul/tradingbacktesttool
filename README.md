@@ -186,3 +186,8 @@ It does not provide financial advice and does not guarantee profitability.
 
 Prototype / Experimental  
 Built to explore NLP-driven automation in trading strategy validation.
+
+## Output
+
+<img width="1917" height="952" alt="image" src="https://github.com/user-attachments/assets/51f22b00-7c37-4fb2-8719-51d4f7c39250" />
+
