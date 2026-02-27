@@ -1,4 +1,4 @@
-# AI Strategy-to-Code Trading Backtester
+# Strategy-to-Code Trading Backtester
 
 An NLP-powered trading engine that converts plain-English trading strategies into executable Python code, runs historical backtests using Alpaca market data, and generates structured performance analytics.
 
