@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantTerminal | professional Algo Backtester</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Keep for secondary metrics -->
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar: Input & Controls -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">🔳</span>
+                <h1>QuantTerminal</h1>
+            </div>
+
+            <div class="input-section">
+                <label>Asset</label>
+                <select id="stock-select" class="glass-input">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+
+            <div class="input-section">
+                <label>Strategy Prompt</label>
+                <textarea id="strategy-prompt" class="glass-input"
+                    placeholder="e.g., EMA 20 crossing EMA 50. Use 2% trailing stop."></textarea>
+                <p class="hint">Your prompt is converted into executable bot code.</p>
+            </div>
+
+            <div class="input-section">
+                <label>Allocated Capital</label>
+                <div class="capital-display">$1,00,000</div>
+            </div>
+
+            <button id="run-backtest" class="btn-primary">
+                <span class="btn-text">Execute Bot</span>
+                <div class="loader-ring hidden"></div>
+            </button>
+
+            <div id="strategy-interpretation" class="interpretation-card hidden">
+                <h3>Quant Dev Logic</h3>
+                <div id="interpreted-content"></div>
+            </div>
+        </aside>
+
+        <!-- Main Content: Terminal & Professional Chart -->
+        <main class="main-content">
+            <header class="dashboard-header">
+                <div class="status-badge" id="bot-status">● System Ready</div>
+                <div class="portfolio-summary">
+                    <div class="item">
+                        <span class="label">Portfolio Value</span>
+                        <span id="total-equity" class="value">$100,000</span>
+                    </div>
+                    <div class="item">
+                        <span class="label">Growth</span>
+                        <span id="total-return-percent" class="return-chip neutral">0.00%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="chart-grid">
+                <!-- TradingView Chart Container -->
+                <div id="tv-chart-container" class="chart-container">
+                    <div class="chart-header">
+                        <h2>Terminal Chart (OHLC)</h2>
+                        <div id="chart-legend" class="legend-item">Price Data Loading...</div>
+                    </div>
+                    <!-- Lightweight Charts will inject here -->
+                </div>
+
+                <div class="bottom-terminal-grid">
+                    <!-- Bot Code Terminal -->
+                    <div class="code-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-tab">Trading Strategy Bot: Standalone Export</span>
+                            <button id="copy-bot-btn" class="btn-copy">Copy Full Bot Source</button>
+                        </div>
+                        <div id="bot-code-preview" class="code-content">/* Awaiting Strategy Prompt... */</div>
+                    </div>
+
+                    <!-- Log Terminal -->
+                    <div class="log-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-tab">Trade Execution Log</span>
+                        </div>
+                        <div class="table-container">
+                            <div class="scroll-wrapper">
+                                <table id="trade-log">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Type</th>
+                                            <th>Qty</th>
+                                            <th>Price</th>
+                                            <th>P&L</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Trades populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Quantitative Metrics -->
+        <aside class="metrics-panel">
+            <section class="score-section">
+                <div class="score-gauge-container">
+                    <div class="score-ring">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="meter" cx="50" cy="50" r="45" id="score-meter"></circle>
+                        </svg>
+                        <div class="score-text">
+                            <span id="score-value">0</span>
+                            <span class="score-max">/100</span>
+                        </div>
+                    </div>
+                    <div id="deployment-status" class="deployment-badge hidden">READY</div>
+                </div>
+            </section>
+
+            <section class="metrics-grid">
+                <div class="metric-card">
+                    <span class="label">Sharpe Ratio</span>
+                    <span id="metric-sharpe" class="value">0.00</span>
+                </div>
+                <div class="metric-card">
+                    <span class="label">Max Drawdown</span>
+                    <span id="metric-drawdown" class="value">0.00%</span>
+                </div>
+                <div class="metric-card">
+                    <span class="label">Profit Factor</span>
+                    <span id="metric-profit-factor" class="value">0.00</span>
+                </div>
+                <div class="metric-card">
+                    <span class="label">Win Rate</span>
+                    <span id="metric-win-rate" class="value">0%</span>
+                </div>
+            </section>
+
+            <div class="walk-forward-container glass">
+                <div class="wf-card">
+                    <span class="wf-label">Training</span>
+                    <div id="wf-train-metrics" class="wf-value">--</div>
+                </div>
+                <div class="wf-card">
+                    <span class="wf-label">Validation</span>
+                    <div id="wf-valid-metrics" class="wf-value">--</div>
+                </div>
+            </div>
+
+            <section class="validation-charts">
+                <div class="chart-wrapper">
+                    <h3>Equity vs Benchmark</h3>
+                    <div class="chart-container mini">
+                        <canvas id="equityChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <h3>Monte Carlo Fan</h3>
+                    <div class="chart-container mini">
+                        <canvas id="monteCarloChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <h3>Drawdown Depth</h3>
+                    <div class="chart-container mini">
+                        <canvas id="drawdownChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/indicators.js"></script>
+    <script src="js/dataEngine.js"></script>
+    <script src="js/strategyParser.js"></script>
+    <script src="js/backtester.js"></script>
+    <script src="js/monteCarlo.js"></script>
+    <script src="js/walkForward.js"></script>
+    <script src="js/metrics.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
